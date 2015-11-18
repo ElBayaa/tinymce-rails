@@ -24239,7 +24239,7 @@ define("tinymce/data/ObservableObject", [
 		 * @param {Object} value Value to set for the property.
 		 * @return {tinymce.data.ObservableObject} Observable object instance.
 		 */
-		set: function(name, value) {
+		set: function(name, value, options) {
 			var key, args, oldValue = this.data[name];
 
 			if (value instanceof Binding) {
@@ -24263,7 +24263,10 @@ define("tinymce/data/ObservableObject", [
 					value: value,
 					oldValue: oldValue
 				};
-
+				// now extend the args with the passed options
+				for(var opt in options){
+					args[opt] = options[opt];
+				}
 				this.fire('change:' + name, args);
 				this.fire('change', args);
 			}
@@ -26686,13 +26689,13 @@ define("tinymce/ui/Control", [
 	 * Setup state properties.
 	 */
 	Tools.each('text title visible disabled active value'.split(' '), function(name) {
-		proto[name] = function(value) {
+		proto[name] = function(value, options) {
 			if (arguments.length === 0) {
 				return this.state.get(name);
 			}
 
 			if (typeof value != "undefined") {
-				this.state.set(name, value);
+				this.state.set(name, value, options);
 			}
 
 			return this;
@@ -42213,11 +42216,12 @@ define("tinymce/ui/FormatControls", [
 						// getComputed value and force using it even if not included
 						// in the items of the menu
 						if(formatName == 'fontname'){
-						  value = editor.dom.getStyle(e.element, 'fontFamily', true)
+						  value = editor.dom.getStyle(e.element, 'fontFamily', true) || ''
+						  value = value.split(',')[0]
 						}else if(formatName == 'fontsize'){
 						  value = editor.dom.getStyle(e.element, 'fontSize', true)
 						}
-						self.value(value, {forceValue: true})
+						self.value(value, options)
 					}else{
   					self.value(value);
 					}
@@ -44083,6 +44087,8 @@ define("tinymce/ui/ListBox", [
 
 				if (selectedItem) {
 					self.text(selectedItem.text);
+				} else if (e.forceValue) {
+					self.text(e.value);
 				} else {
 					self.text(self.settings.text);
 				}
