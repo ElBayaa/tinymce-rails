@@ -24239,7 +24239,7 @@ define("tinymce/data/ObservableObject", [
 		 * @param {Object} value Value to set for the property.
 		 * @return {tinymce.data.ObservableObject} Observable object instance.
 		 */
-		set: function(name, value, options) {
+		set: function(name, value) {
 			var key, args, oldValue = this.data[name];
 
 			if (value instanceof Binding) {
@@ -24263,10 +24263,7 @@ define("tinymce/data/ObservableObject", [
 					value: value,
 					oldValue: oldValue
 				};
-				// now extend the args with the passed options
-				for(var opt in options){
-					args[opt] = options[opt];
-				}
+
 				this.fire('change:' + name, args);
 				this.fire('change', args);
 			}
@@ -26689,13 +26686,13 @@ define("tinymce/ui/Control", [
 	 * Setup state properties.
 	 */
 	Tools.each('text title visible disabled active value'.split(' '), function(name) {
-		proto[name] = function(value, options) {
+		proto[name] = function(value) {
 			if (arguments.length === 0) {
 				return this.state.get(name);
 			}
 
 			if (typeof value != "undefined") {
-				this.state.set(name, value, options);
+				this.state.set(name, value);
 			}
 
 			return this;
@@ -44134,8 +44131,6 @@ define("tinymce/ui/ListBox", [
 
 				if (selectedItem) {
 					self.text(selectedItem.text);
-				} else if (e.forceValue) {
-					self.text(e.value);
 				} else {
 					self.text(self.settings.text);
 				}
