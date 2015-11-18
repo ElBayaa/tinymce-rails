@@ -42213,23 +42213,65 @@ define("tinymce/ui/FormatControls", [
 					});
 
 					if(!value && options.forceValue){
-						// getComputed value and force using it even if not included
-						// in the items of the menu
+						// getComputed value and included it in the items of the menu
+						// we currently use this with fontname and fontsize only
 						if(formatName == 'fontname'){
-						  value = editor.dom.getStyle(e.element, 'fontFamily', true) || ''
-						  value = value.split(',')[0]
-						  // remove the quotes that wrap the value
-						  if(["'", '"'].indexOf(value.charAt(0)) != -1 &&
-						    ["'", '"'].indexOf(value.charAt(value.length-1)) != -1 ){
-						  	value = value.substring(1, value.length-1);
+
+						  value = editor.dom.getStyle(e.element, 'fontFamily', true)
+
+						  var text = value.split(',')[0]
+						  // remove the quotes that wrap the text
+						  if(["'", '"'].indexOf(text.charAt(0)) != -1 &&
+						    ["'", '"'].indexOf(text.charAt(text.length-1)) != -1 ){
+						  	text = text.substring(1, text.length-1);
 						  }
+
+						  // now add this computed value to the list of values
+						  // if not already included.
+						  // Note that, the value may be already included but we reached
+						  // here because style-value (not computed value) is null
+						  var menu = self.state.data.menu;
+						  var found = false;
+						  for(var i = 0; i < menu.length && !found; i++){
+						  	if(menu[i].value == value)
+						  		found = true;
+						  }
+						  if(!found)
+								menu.push({
+									text: {raw: text},
+									value: value,
+									textStyle: value.indexOf('dings') == -1 ? 'font-family:' + value : ''
+								});
+
 						}else if(formatName == 'fontsize'){
+
 						  value = editor.dom.getStyle(e.element, 'fontSize', true)
+
+						  var text = value
+						  // remove the quotes that wrap the text
+						  if(["'", '"'].indexOf(text.charAt(0)) != -1 &&
+						    ["'", '"'].indexOf(text.charAt(text.length-1)) != -1 ){
+						  	text = text.substring(1, text.length-1);
+						  }
+
+						  // now add this computed value to the list of values
+						  // if not already included.
+						  // Note that, the value may be already included but we reached
+						  // here because style-value (not computed value) is null
+						  var menu = self.state.data.menu;
+						  var found = false;
+						  for(var i = 0; i < menu.length && !found; i++){
+						  	if(menu[i].value == value)
+						  		found = true;
+						  }
+						  if(!found)
+						    menu.push({text: text, value: value});
 						}
-						self.value(value, options)
-					}else{
-  					self.value(value);
+
 					}
+
+					self.value(value);
+					
 				});
 			};
 		}
