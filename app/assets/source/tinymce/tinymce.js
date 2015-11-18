@@ -42218,6 +42218,11 @@ define("tinymce/ui/FormatControls", [
 						if(formatName == 'fontname'){
 						  value = editor.dom.getStyle(e.element, 'fontFamily', true) || ''
 						  value = value.split(',')[0]
+						  // remove the quotes that wrap the value
+						  if(["'", '"'].indexOf(value.charAt(0)) != -1 &&
+						    ["'", '"'].indexOf(value.charAt(value.length-1)) != -1 ){
+						  	value = value.substring(1, value.length-1);
+						  }
 						}else if(formatName == 'fontsize'){
 						  value = editor.dom.getStyle(e.element, 'fontSize', true)
 						}
