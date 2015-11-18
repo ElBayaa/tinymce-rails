@@ -42178,7 +42178,7 @@ define("tinymce/ui/FormatControls", [
 		// currently it can contain forceValue flag to force the FontName
 		// and FontSize menus to have the computed value if no selected value
 		// even if the computed value is not included in menu items
-		function createListBoxChangeHandler(items, formatName) {
+		function createListBoxChangeHandler(items, formatName, options) {
 			return function() {
 				var self = this;
 				options = options || {};
