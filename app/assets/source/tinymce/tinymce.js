@@ -42174,9 +42174,14 @@ define("tinymce/ui/FormatControls", [
 	function registerControls(editor) {
 		var formatMenu;
 
+		// @param {Object} [options] optional, set of options passed to the method.
+		// currently it can contain forceValue flag to force the FontName
+		// and FontSize menus to have the computed value if no selected value
+		// even if the computed value is not included in menu items
 		function createListBoxChangeHandler(items, formatName) {
 			return function() {
 				var self = this;
+				options = options || {};
 
 				editor.on('nodeChange', function(e) {
 					var formatter = editor.formatter;
@@ -42204,7 +42209,18 @@ define("tinymce/ui/FormatControls", [
 						}
 					});
 
-					self.value(value);
+					if(!value && options.forceValue){
+						// getComputed value and force using it even if not included
+						// in the items of the menu
+						if(formatName == 'fontname'){
+						  value = editor.dom.getStyle(e.element, 'fontFamily', true)
+						}else if(formatName == 'fontsize'){
+						  value = editor.dom.getStyle(e.element, 'fontSize', true)
+						}
+						self.value(value, {forceValue: true})
+					}else{
+  					self.value(value);
+					}
 				});
 			};
 		}
@@ -42621,7 +42637,7 @@ define("tinymce/ui/FormatControls", [
 				tooltip: 'Font Family',
 				values: items,
 				fixedWidth: true,
-				onPostRender: createListBoxChangeHandler(items, 'fontname'),
+				onPostRender: createListBoxChangeHandler(items, 'fontname', {forceValue: true}),
 				onselect: function(e) {
 					if (e.control.settings.value) {
 						editor.execCommand('FontName', false, e.control.settings.value);
@@ -42651,7 +42667,7 @@ define("tinymce/ui/FormatControls", [
 				tooltip: 'Font Sizes',
 				values: items,
 				fixedWidth: true,
-				onPostRender: createListBoxChangeHandler(items, 'fontsize'),
+				onPostRender: createListBoxChangeHandler(items, 'fontsize', {forceValue: true}),
 				onclick: function(e) {
 					if (e.control.settings.value) {
 						editor.execCommand('FontSize', false, e.control.settings.value);
