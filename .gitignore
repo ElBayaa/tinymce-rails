@@ -4,3 +4,5 @@ Gemfile.lock
 sandbox/log
 sandbox/tmp
 sandbox/public/assets
+tinymce-rails.sublime-project
+tinymce-rails.sublime-workspace

@@ -42214,9 +42214,9 @@ define("tinymce/ui/FormatControls", [
 						// we currently use this with fontname and fontsize only
 						if(formatName == 'fontname'){
 
-						  value = editor.dom.getStyle(e.element, 'fontFamily', true)
+						  value = editor.dom.getStyle(e.element, 'fontFamily', true);
 
-						  var text = value.split(',')[0]
+						  var text = value.split(',')[0];
 						  // remove the quotes that wrap the text
 						  if(["'", '"'].indexOf(text.charAt(0)) != -1 &&
 						    ["'", '"'].indexOf(text.charAt(text.length-1)) != -1 ){
@@ -42242,14 +42242,13 @@ define("tinymce/ui/FormatControls", [
 
 						}else if(formatName == 'fontsize'){
 
-						  value = editor.dom.getStyle(e.element, 'fontSize', true)
+						  value = editor.dom.getStyle(e.element, 'fontSize', true);
 
-						  var text = value
-						  // remove the quotes that wrap the text
-						  if(["'", '"'].indexOf(text.charAt(0)) != -1 &&
-						    ["'", '"'].indexOf(text.charAt(text.length-1)) != -1 ){
-						  	text = text.substring(1, text.length-1);
-						  }
+						  value = parseFloat(value);
+						  // round to two decimal digits at most
+						  value = Math.round(value * 100)/100;
+						  // return the px postfix which was removed by parseFloat
+						  value = value + 'px';
 
 						  // now add this computed value to the list of values
 						  // if not already included.
@@ -42262,7 +42261,7 @@ define("tinymce/ui/FormatControls", [
 						  		found = true;
 						  }
 						  if(!found)
-						    menu.push({text: text, value: value});
+						    menu.push({text: value, value: value});
 						}
 
 					}
