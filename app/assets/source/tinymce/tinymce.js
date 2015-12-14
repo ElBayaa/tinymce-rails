@@ -18576,8 +18576,8 @@ define("tinymce/Formatter", [
 				],
 
 				bold: [
-					{inline: 'strong', remove: 'all'},
 					{inline: 'span', styles: {fontWeight: 'bold'}},
+					{inline: 'strong', remove: 'all'},
 					{inline: 'b', remove: 'all'}
 				],
 
