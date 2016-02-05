@@ -13171,7 +13171,8 @@ define("tinymce/html/DomParser", [
 				while (node) {
 					next = node.next;
 
-					if (node.type == 3 || (node.type == 1 && node.name !== 'p' &&
+					if (node.type == 3 || (node.type == 1 &&
+					  settings.no_root_block_wrap.indexOf(node.name) === -1 &&
 						!blockElements[node.name] && !node.attr('data-mce-type'))) {
 						if (!rootBlockNode) {
 							// Create a new root block element
@@ -35585,6 +35586,7 @@ define("tinymce/Editor", [
 			// See: http://www.w3.org/TR/CSS2/fonts.html#propdef-font-size
 			font_size_legacy_values: 'xx-small,small,medium,large,x-large,xx-large,300%',
 			forced_root_block: 'p',
+			no_root_block_wrap: ['p'], // don't wrap <p> with another <p>
 			hidden_input: true,
 			padd_empty_editor: true,
 			render_ui: true,
