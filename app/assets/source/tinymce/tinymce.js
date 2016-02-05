@@ -21884,11 +21884,10 @@ define("tinymce/ForceBlocks", [], function() {
 			var startContainer, startOffset, endContainer, endOffset, rootBlockNode;
 			var tempNode, offset = -0xFFFFFF, wrapped, restoreSelection;
 			var tmpRng, rootNodeName, forcedRootBlock;
-			var nodeName = node.nodeName.toLowerCase();
 
 			forcedRootBlock = settings.forced_root_block;
-			if (!node || node.nodeType !== 1 || !forcedRootBlock ||
-			  settings.no_root_block_wrap.indexOf(nodeName) !== -1) {
+
+			if (!node || node.nodeType !== 1 || !forcedRootBlock) {
 				return;
 			}
 
